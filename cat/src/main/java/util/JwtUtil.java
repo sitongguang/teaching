@@ -4,15 +4,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
-import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Date;
 
 /**
    * Our simple static class that demonstrates how to create and decode JWTs.
-   * https://github.com/oktadeveloper/okta-java-jwt-example.git
+   * Thanks to https://github.com/oktadeveloper/okta-java-jwt-example.git
  */
 public class JwtUtil {
 
@@ -35,7 +34,10 @@ public class JwtUtil {
         Date now = new Date(nowMillis);
 
         //We will sign our JWT with our ApiKey secret
+
+
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+//        byte[] apiKeySecretBytes = SECRET_KEY.getBytes();
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
@@ -43,8 +45,10 @@ public class JwtUtil {
                 .setIssuedAt(now)
                 .setSubject(subject)
                 .setIssuer(issuer)
+
 //                .signWith(signingKey,signatureAlgorithm);//version 0.10.7
                 .signWith(signatureAlgorithm, signingKey);//version 0.9.1
+
 
         //if it has been specified, let's add the expiration
         if (ttlMillis >= 0) {
@@ -57,7 +61,6 @@ public class JwtUtil {
     }
 
     public static Claims decodeJWT(String jwt) {
-
         //This line will throw an exception if it is not a signed JWS (as expected)
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
