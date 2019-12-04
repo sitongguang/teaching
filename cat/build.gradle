@@ -6,7 +6,7 @@ group 'xg.cn.edu.sdjzu'
 version '1.0-SNAPSHOT'
 
 repositories {
-    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
 }
 
 dependencies {
@@ -17,16 +17,18 @@ dependencies {
     //the fastjson must go after jackson or would be seeing Error during artifact deployment. See server log for details.
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.62'
     //json web token
-//    compile 'io.jsonwebtoken:jjwt-api:0.10.7'
-//    runtime 'io.jsonwebtoken:jjwt-impl:0.10.7',
-//            // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
-//            //'org.bouncycastle:bcprov-jdk15on:1.60',
-//            'io.jsonwebtoken:jjwt-jackson:0.10.7'
+
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+    // 0.10似乎也应可以
 //    compile group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.10.7'
 
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
     compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
 
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "utf-8"
 }
