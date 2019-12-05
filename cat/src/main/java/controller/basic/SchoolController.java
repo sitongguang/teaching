@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -38,6 +39,19 @@ public class SchoolController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //设置响应字符编码为UTF-8
+        response.setContentType("text/html;charset=UTF-8");
+        //创建JSON对象message，以便往前端响应信息
+        JSONObject message = new JSONObject();
+        //访问权限验证
+        HttpSession session = request.getSession(false);
+        if(session==null || session.getAttribute("currentUser")==null){
+            message.put("message", "请登录或重新登录");
+            //响应message到前端
+            response.getWriter().println(message);
+            return;
+        }
+
         //设置请求字符编码为UTF-8
         request.setCharacterEncoding("UTF-8");
         //根据request对象，获得代表参数的JSON字串
@@ -48,10 +62,7 @@ public class SchoolController extends HttpServlet {
         //前台没有为id赋值，此处模拟自动生成id。如果Dao能真正完成数据库操作，删除下一行。
         schoolToAdd.setId(4 + (int) (Math.random() * 100));
 
-        //设置响应字符编码为UTF-8
-        response.setContentType("text/html;charset=UTF-8");
-        //创建JSON对象message，以便往前端响应信息
-        JSONObject message = new JSONObject();
+
         //在数据库表中增加School对象
         try {
             SchoolService.getInstance().add(schoolToAdd);
