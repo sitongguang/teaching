@@ -76,6 +76,6 @@ public final class UserService {
 				break;
 			}
 		}
-		return this.login(desiredUser);
+		return desiredUser;
 	}	
 }
